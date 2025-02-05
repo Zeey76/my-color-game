@@ -73,7 +73,7 @@ const App = () => {
       setLevel(level + 1);
       setGameStatus("Excellent! Keep going!");
       setIsCorrect(true);
-      setTimeout(startNewGame, 1500);
+      setTimeout(startNewGame, 3000);
     } else {
       setLevel(Math.max(1, level - 1));
       setGameStatus("Wrong! New colors coming up!");
