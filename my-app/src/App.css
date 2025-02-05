@@ -7,6 +7,7 @@
 .container {
   min-height: 100vh;
   transition: background-color 0.3s;
+  font-family: Eb Garamond, serif;
 }
 
 .container.dark {
@@ -176,7 +177,7 @@
 }
 
 .animate-shake {
-  animation: shake 3s ease-in-out;
+  animation: shake 2s ease-in-out;
 }
 
 @keyframes shake {
@@ -193,7 +194,7 @@
 }
 
 .animate-bounce {
-  animation: bounce 3s ease-in-out;
+  animation: bounce 2s ease-in-out;
 }
 
 @keyframes bounce {
