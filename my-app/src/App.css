@@ -176,7 +176,7 @@
 }
 
 .animate-shake {
-  animation: shake 2s ease-in-out;
+  animation: shake 3s ease-in-out;
 }
 
 @keyframes shake {
@@ -193,7 +193,7 @@
 }
 
 .animate-bounce {
-  animation: bounce 2s ease-in-out;
+  animation: bounce 3s ease-in-out;
 }
 
 @keyframes bounce {
