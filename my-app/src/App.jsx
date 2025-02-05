@@ -167,8 +167,6 @@ const App = () => {
               data-testid="newGameButton"
               className="new-game-button"
               onClick={() => {
-                setLevel(1);
-                setScore(0);
                 handleNewGame();
               }}
             >
