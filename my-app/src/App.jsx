@@ -2,39 +2,43 @@ import { useState, useEffect } from "react";
 import { Moon, Sun, AlertCircle, Check, Trophy, Zap } from "lucide-react";
 import "./App.css";
 
+const TARGET_COLORS = [
+  { r: 255, g: 163, b: 109 }, // Soft Peach
+  { r: 91, g: 153, b: 117 }, // Sage Green
+  { r: 84, g: 138, b: 176 }, // Steel Blue
+  { r: 220, g: 174, b: 74 }, // Golden Olive
+  { r: 188, g: 129, b: 174 }, // Soft Lavender
+  { r: 104, g: 144, b: 145 }, // Dusty Teal
+  { r: 213, g: 137, b: 84 }, // Warm Sand
+  { r: 145, g: 106, b: 162 }, // Muted Violet
+  { r: 130, g: 162, b: 140 }, // Moss Green
+  { r: 226, g: 142, b: 120 }, // Light Coral
+  { r: 132, g: 157, b: 169 }, // Misty Blue
+  { r: 186, g: 153, b: 125 }, // Taupe Brown
+  { r: 122, g: 176, b: 161 }, // Soft Mint
+  { r: 170, g: 137, b: 169 }, // Warm Mauve
+  { r: 186, g: 125, b: 120 }, // Blush Beige
+];
+
+const rgbToString = (rgb) => `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+
 const getRandomRGB = () => ({
   r: Math.floor(Math.random() * 256),
   g: Math.floor(Math.random() * 256),
   b: Math.floor(Math.random() * 256),
 });
 
-const rgbToString = (rgb) => `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+const generateColorOptions = (targetColorStr) => {
+  const options = [targetColorStr];
 
-const generateSimilarColor = (baseColor) => {
-  const variance = 50;
-  return {
-    r: Math.max(
-      0,
-      Math.min(
-        255,
-        baseColor.r + Math.floor(Math.random() * variance * 2) - variance
-      )
-    ),
-    g: Math.max(
-      0,
-      Math.min(
-        255,
-        baseColor.g + Math.floor(Math.random() * variance * 2) - variance
-      )
-    ),
-    b: Math.max(
-      0,
-      Math.min(
-        255,
-        baseColor.b + Math.floor(Math.random() * variance * 2) - variance
-      )
-    ),
-  };
+  while (options.length < 6) {
+    const randomColor = rgbToString(getRandomRGB());
+    if (!options.includes(randomColor)) {
+      options.push(randomColor);
+    }
+  }
+
+  return options.sort(() => Math.random() - 0.5);
 };
 
 const App = () => {
@@ -47,23 +51,12 @@ const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
 
-  const generateColorOptions = (baseRGB) => {
-    const options = [rgbToString(baseRGB)];
-    while (options.length < 6) {
-      const similarColor = generateSimilarColor(baseRGB);
-      const colorString = rgbToString(similarColor);
-      if (!options.includes(colorString)) {
-        options.push(colorString);
-      }
-    }
-    return options.sort(() => Math.random() - 0.5);
-  };
-
   const startNewGame = () => {
-    const newTargetRGB = getRandomRGB();
-    const targetColorString = rgbToString(newTargetRGB);
+    const targetRGB =
+      TARGET_COLORS[Math.floor(Math.random() * TARGET_COLORS.length)];
+    const targetColorString = rgbToString(targetRGB);
     setTargetColor(targetColorString);
-    setColorOptions(generateColorOptions(newTargetRGB));
+    setColorOptions(generateColorOptions(targetColorString));
     setGameStatus("");
     setShowStatus(false);
     setIsCorrect(false);
@@ -138,7 +131,7 @@ const App = () => {
           <div>
             {showStatus && (
               <div
-                className={`status-message ${isCorrect ? "success" : "error"}`}
+                className={`status-message ${isCorrect ? "success animate-bounce" : "error animate-shake"}`}
               >
                 {isCorrect ? (
                   <Check size={24} style={{ marginRight: "0.5rem" }} />
@@ -148,16 +141,18 @@ const App = () => {
                 <span>{gameStatus}</span>
               </div>
             )}
-
-            <div className="options-grid">
-              {colorOptions.map((color, index) => (
-                <button
-                  key={index}
-                  className="color-option"
-                  style={{ backgroundColor: color }}
-                  onClick={() => handleGuess(color)}
-                />
-              ))}
+            <div>
+              <p className="color-label">Select the matching color:</p>
+              <div className="options-grid">
+                {colorOptions.map((color, index) => (
+                  <button
+                    key={index}
+                    className="color-option"
+                    style={{ backgroundColor: color }}
+                    onClick={() => handleGuess(color)}
+                  />
+                ))}
+              </div>
             </div>
 
             <button
