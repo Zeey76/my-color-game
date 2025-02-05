@@ -58,7 +58,6 @@ const App = () => {
     if (color === targetColor) {
       const newScore = score + level;
       setScore(newScore);
-      // Update high score if the new score is higher
       setLevel(level + 1);
       setGameStatus("Excellent! Keep going!");
       setIsCorrect(true);
@@ -75,7 +74,7 @@ const App = () => {
   const handleNewGame = () => {
     setLevel(1);
     setScore(0);
-    localStorage.removeItem("colorGameLevel"); // Clear saved level
+    localStorage.removeItem("colorGameLevel");
     startNewGame();
   };
 

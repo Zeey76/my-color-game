@@ -107,7 +107,7 @@
   aspect-ratio: 1;
   border-radius: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out, background-color 0.5s ease; /* Added background-color transition */
+  transition: all 0.3s ease-in-out, background-color 0.5s ease;
 }
 
 .color-label {
@@ -132,7 +132,7 @@
   border: none;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out, background-color 0.5s ease; /* Added background-color transition */
+  transition: all 0.3s ease-in-out, background-color 0.5s ease;
 }
 
 .color-option:hover {
