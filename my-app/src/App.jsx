@@ -8,14 +8,39 @@ import {
 } from "./components/ColorUtils";
 
 const App = () => {
+  // Initialize state with values from localStorage if they exist
   const [targetColor, setTargetColor] = useState("");
   const [colorOptions, setColorOptions] = useState([]);
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(() => {
+    const savedScore = localStorage.getItem("colorGameScore");
+    return savedScore ? parseInt(savedScore) : 0;
+  });
   const [gameStatus, setGameStatus] = useState("");
   const [showStatus, setShowStatus] = useState(false);
-  const [level, setLevel] = useState(1);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [level, setLevel] = useState(() => {
+    const savedLevel = localStorage.getItem("colorGameLevel");
+    return savedLevel ? parseInt(savedLevel) : 1;
+  });
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedMode = localStorage.getItem("colorGameDarkMode");
+    return savedMode ? JSON.parse(savedMode) : false;
+  });
   const [isCorrect, setIsCorrect] = useState(false);
+
+  // Save score to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("colorGameScore", score);
+  }, [score]);
+
+  // Save dark mode preference to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("colorGameDarkMode", JSON.stringify(isDarkMode));
+  }, [isDarkMode]);
+
+  // Save level to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("colorGameLevel", level);
+  }, [level]);
 
   const startNewGame = () => {
     const targetRGB =
@@ -28,14 +53,12 @@ const App = () => {
     setIsCorrect(false);
   };
 
-  useEffect(() => {
-    startNewGame();
-  }, []);
-
   const handleGuess = (color) => {
     setShowStatus(true);
     if (color === targetColor) {
-      setScore(score + level);
+      const newScore = score + level;
+      setScore(newScore);
+      // Update high score if the new score is higher
       setLevel(level + 1);
       setGameStatus("Excellent! Keep going!");
       setIsCorrect(true);
@@ -47,6 +70,18 @@ const App = () => {
       setTimeout(startNewGame, 1000);
     }
   };
+
+  // Reset game and clear stored score
+  const handleNewGame = () => {
+    setLevel(1);
+    setScore(0);
+    localStorage.removeItem("colorGameLevel"); // Clear saved level
+    startNewGame();
+  };
+
+  useEffect(() => {
+    startNewGame();
+  }, []);
 
   return (
     <div className={`container ${isDarkMode ? "dark" : "light"}`}>
@@ -120,6 +155,7 @@ const App = () => {
                   <button
                     data-testid="colorOption"
                     key={index}
+                    disabled={showStatus}
                     className="color-option"
                     style={{ backgroundColor: color }}
                     onClick={() => handleGuess(color)}
@@ -134,7 +170,7 @@ const App = () => {
               onClick={() => {
                 setLevel(1);
                 setScore(0);
-                startNewGame();
+                handleNewGame();
               }}
             >
               Start New Game
