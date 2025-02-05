@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
-import { Moon, Sun, AlertCircle, Check, Trophy, Zap } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import "./App.css";
 import {
   generateColorOptions,
   rgbToString,
   TARGET_COLORS,
-} from "./components/ColorUtils";
+} from "./utils/ColorUtils";
+import TargetColor from "./components/TargetColor";
+import StatusMessage from "./components/StatusMessage";
+import ColorOptions from "./components/ColorOptions";
 
 const App = () => {
   // Initialize state with values from localStorage if they exist
@@ -105,63 +108,22 @@ const App = () => {
         </div>
 
         <div className="main-content">
-          <div>
-            <div className="stats-container">
-              <div className={`stats-card ${isDarkMode ? "dark" : "light"}`}>
-                <div className="stats-header">
-                  <Zap size={20} color="#F59E0B" />
-                  <span>Level</span>
-                </div>
-                <div className="title">{level}</div>
-              </div>
-              <div className={`stats-card ${isDarkMode ? "dark" : "light"}`}>
-                <div className="stats-header">
-                  <Trophy size={20} color="#8B5CF6" />
-                  <span>Score</span>
-                </div>
-                <div data-testid="score" className="title">
-                  {score}
-                </div>
-              </div>
-            </div>
-            <div
-              className="color-box"
-              data-testid="colorBox"
-              style={{ backgroundColor: targetColor }}
-            />
-          </div>
+          <TargetColor
+            isDarkMode={isDarkMode}
+            score={score}
+            targetColor={targetColor}
+            level={level}
+          />
 
           <div>
             {showStatus && (
-              <div
-                data-testid="gameStatus"
-                className={`status-message ${
-                  isCorrect ? "success animate-bounce" : "error animate-shake"
-                }`}
-              >
-                {isCorrect ? (
-                  <Check size={24} style={{ marginRight: "0.5rem" }} />
-                ) : (
-                  <AlertCircle size={24} style={{ marginRight: "0.5rem" }} />
-                )}
-                <span>{gameStatus}</span>
-              </div>
+              <StatusMessage isCorrect={isCorrect} gameStatus={gameStatus} />
             )}
-            <div>
-              <p className="color-label">Select the matching color:</p>
-              <div className="options-grid">
-                {colorOptions.map((color, index) => (
-                  <button
-                    data-testid="colorOption"
-                    key={index}
-                    disabled={showStatus}
-                    className="color-option"
-                    style={{ backgroundColor: color }}
-                    onClick={() => handleGuess(color)}
-                  />
-                ))}
-              </div>
-            </div>
+            <ColorOptions
+              colorOptions={colorOptions}
+              handleGuess={handleGuess}
+              showStatus={showStatus}
+            />
 
             <button
               data-testid="newGameButton"
