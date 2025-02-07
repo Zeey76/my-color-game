@@ -33,7 +33,6 @@ export const generateColorOptions = (targetColorStr) => {
       options.push(randomColor);
     }
   }
-
   return options.sort(() => Math.random() - 0.5);
 };
 
